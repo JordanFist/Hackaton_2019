@@ -2,9 +2,16 @@ package com.google.location.nearby.apps.rockpaperscissors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.os.Bundle;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -34,8 +41,63 @@ import com.google.android.gms.nearby.connection.Strategy;
 /** Activity controlling the Rock Paper Scissors game */
 public class MainActivity extends AppCompatActivity {
 
-  public List<AbstractPointOfInterest> = new List<AbstractPointOfInterest>;
+  public ArrayList<AbstractPointOfInterest> ListPoint;
   private static final String TAG = "RockPaperScissors";
+  BufferedReader reader;
+  BufferedWriter writer;
+
+  MainActivity(){
+    ListPoint = new ArrayList<AbstractPointOfInterest>();
+    BufferedReader reader = null;
+    BufferedWriter writer = null;
+    FileToList();
+  }
+
+  private void FileToList() {
+    String text;
+    reader = new BufferedReader("zones.txt", true);
+    try {
+      while ((text = reader.readLine()) != null) {
+        String[] split = text.split("\t", -1);
+        String[] split2 = split[0].split(",", -1);
+        Point p = new Point(Integer.parseInt(split2[0]), Integer.parseInt(split2[1]));
+        switch (split[1]) {
+          case "SafeArea":
+            ListPoint.add(new SafeArea(p, split[1], Integer.parseInt(split[2])));
+            break;
+          case "WaterSpot":
+            ListPoint.add(new WaterSpot(p, split[1], Integer.parseInt(split[2])));
+            break;
+        }
+      }
+    }
+    catch(IOException e){
+        System.out.println("MDR");
+      }
+  }
+  private void ListToFile() {
+    String s;
+    for(AbstractPointOfInterest var : ListPoint){
+      String str = "";
+      str += String.valueOf(var.getlocalisation().x) + "," + String.valueOf(var.getlocalisation().y) + "\t";
+      str += var.gettype() + "\t";
+      str += var.parameters();
+      try {
+        FileWriter fstream = new FileWriter("zones.txt", true); //true tells to append data.
+        writer = new BufferedWriter(fstream);
+        writer.write(str + "\n");
+        fstream.flush();
+      }
+
+
+      catch (IOException e) {
+        System.err.println("Error: " + e.getMessage());
+      }
+    }
+
+  }
+
+
 
   private static final String[] REQUIRED_PERMISSIONS =
       new String[] {
