@@ -1,3 +1,4 @@
+package pointOfInterest;
 
 
 class SafeArea extends AbstractPointOfInterest{

@@ -1,3 +1,4 @@
+package pointOfInterest;
 
 
 class WaterSpot extends AbstractPointOfInterest{

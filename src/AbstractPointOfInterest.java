@@ -1,3 +1,5 @@
+package pointOfInterest;
+
 java.awt.Point
 java.lang.String
 
