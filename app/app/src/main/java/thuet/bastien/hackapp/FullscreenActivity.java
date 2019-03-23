@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -12,7 +13,7 @@ import android.view.View;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class FullscreenActivity extends AppCompatActivity {
+public class FullscreenActivity extends AppCompatActivity implements View.OnTouchListener{
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -61,6 +62,9 @@ public class FullscreenActivity extends AppCompatActivity {
             mControlsView.setVisibility(View.VISIBLE);
         }
     };
+
+    private int mPoint;
+
     private boolean mVisible;
     private final Runnable mHideRunnable = new Runnable() {
         @Override
@@ -86,13 +90,15 @@ public class FullscreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.setProperty("https.protocols", "TLSv1.1");
+        mPoint = 0;
 
         setContentView(R.layout.activity_fullscreen);
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
-
+        //View textView = findViewById(R.id.textView2);
 
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
@@ -101,11 +107,12 @@ public class FullscreenActivity extends AppCompatActivity {
                 toggle();
             }
         });
+        mContentView.setOnTouchListener(this);
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+        findViewById(R.id.showBtn).setOnTouchListener(mDelayHideTouchListener);
     }
 
     @Override
@@ -118,9 +125,49 @@ public class FullscreenActivity extends AppCompatActivity {
         delayedHide(100);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int x = (int)event.getX();
+        int y = (int)event.getY();
+
+        return false;
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        switch(mPoint){
+            case 1:
+                View point1 = findViewById(R.id.imageButton);
+                View textView = findViewById(R.id.SaveBtn);
+                textView.setY(y -90);
+                textView.setX(x -30);
+                break;
+            case 2:
+                View point2 = findViewById(R.id.imageButton2);
+                break;
+            default:
+                break;
+        }
+
+        if (mVisible) {
+
+            //hide();
+        } else {
+            show();
+        }
+
+        return true;
+    }
+
+    
+
     private void toggle() {
         if (mVisible) {
-            hide();
+
+            //hide();
         } else {
             show();
         }
