@@ -102,11 +102,11 @@ public class MainActivity extends AppCompatActivity {
                 Point p = new Point(Integer.parseInt(split2[0]), Integer.parseInt(split2[1]));
                 switch (split[1]) {
                     case "SafeArea":
-                        SafeArea area = new SafeArea(p, split[1], Integer.parseInt(split[2]));
+                        SafeArea area = new SafeArea(p, split[1], Integer.parseInt(split[3]));
                         tmp.add(area);
                         break;
                     case "WaterSpot":
-                        WaterSpot water = new WaterSpot(p, split[1], Integer.parseInt(split[2]));
+                        WaterSpot water = new WaterSpot(p, split[1], Integer.parseInt(split[3]));
                         tmp.add(water);
                         break;
                 }
@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
             String str = "";
             str += String.valueOf(var.getlocalisation().x) + "," + String.valueOf(var.getlocalisation().y) + "\t";
             str += var.gettype() + "\t";
+            str += var.getDate() + "\t";
             str += var.parameters() + "\n";
             writeToFile(str, context);
         }
@@ -258,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        writeToFile("1,5\tSafeArea\t1\n", context);
+        writeToFile("1,5\tWaterSpot\t100\t1\n", context);
         reader = null;
         writer = null;
 

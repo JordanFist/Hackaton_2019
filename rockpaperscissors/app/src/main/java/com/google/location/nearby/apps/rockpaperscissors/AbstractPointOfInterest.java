@@ -4,14 +4,17 @@ package com.google.location.nearby.apps.rockpaperscissors;
 import android.graphics.Point;
 
 import java.lang.String;
+import java.util.Date;
 
 abstract class AbstractPointOfInterest{
     private Point _localisation;
     private String _type;
+    private long _date;
 
     AbstractPointOfInterest(Point p, String s){
         _localisation = p;
         _type = s;
+        _date = new Date().getTime();
     }
 
     abstract String parameters();
@@ -29,4 +32,5 @@ abstract class AbstractPointOfInterest{
     void settype(String type){
         _type = type;
     }
+    long getDate(){return _date;}
 }
