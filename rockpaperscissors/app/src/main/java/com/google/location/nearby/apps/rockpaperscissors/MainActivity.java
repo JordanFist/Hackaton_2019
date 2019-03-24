@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -47,26 +48,23 @@ public class MainActivity extends AppCompatActivity {
   private static final String TAG = "RockPaperScissors";
   static BufferedReader reader;
   static BufferedWriter writer;
-  private static Context context;
-
-  MainActivity(){
-    ListPoint = new ArrayList<AbstractPointOfInterest>();
-    reader = null;
-    writer = null;
-    FileToList();
-  }
+  private Context context;
 
   private void FileToList(){
 //    String text;
+
+    String filePath = context.getFilesDir() + "/" + "zones.txt";
+    File file = new File(filePath);
+
     try {
-      FileReader fstream = new FileReader("zones.txt"); //true tells to append data.
+      FileReader fstream = new FileReader(file); //true tells to append data.
       reader = new BufferedReader(fstream);
     } catch(FileNotFoundException e) {
-      File file = new File("zones.txt");
       try{
-        System.out.print("OOOOOOOOOOOOOOOOOOOOOO");
+//        File file = new File("zones.txt");
+//        System.out.print("OOOOOOOOOOOOOOOOOOOOOO");
         file.createNewFile();
-        FileReader fstream = new FileReader("zones.txt"); //true tells to append data.
+        FileReader fstream = new FileReader(file); //true tells to append data.
         reader = new BufferedReader(fstream);
       } catch(IOException e1) {
         System.out.println("error");
@@ -280,6 +278,12 @@ public class MainActivity extends AppCompatActivity {
 
     TextView nameView = findViewById(R.id.name);
     nameView.setText(getString(R.string.codename, codeName));
+
+    context = getApplicationContext();
+    ListPoint = new ArrayList<AbstractPointOfInterest>();
+    reader = null;
+    writer = null;
+    FileToList();
 
     connectionsClient = Nearby.getConnectionsClient(this);
 
