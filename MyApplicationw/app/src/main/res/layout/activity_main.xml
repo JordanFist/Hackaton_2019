@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+-->
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+    <!--<TextView
+        android:id="@+id/fullscreen_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:keepScreenOn="true"
+        android:text="Apolipso"
+        android:textColor="#0cd85c"
+        android:textSize="50sp"
+        android:textStyle="bold" />-->
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+    <!--<FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"/>
+</FrameLayout>-->
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<com.mapbox.mapboxsdk.maps.MapView
+    android:id="@+id/mapView"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    mapbox:layout_constraintBottom_toBottomOf="parent"
+    mapbox:layout_constraintEnd_toEndOf="parent"
+    mapbox:layout_constraintStart_toStartOf="parent"
+    mapbox:layout_constraintTop_toTopOf="parent"
+    mapbox:mapbox_cameraTargetLat="41.885"
+    mapbox:mapbox_cameraTargetLng="-87.679"
+    mapbox:mapbox_cameraTilt="60"
+    mapbox:mapbox_cameraZoom="12" />
+
+</android.support.constraint.ConstraintLayout>
