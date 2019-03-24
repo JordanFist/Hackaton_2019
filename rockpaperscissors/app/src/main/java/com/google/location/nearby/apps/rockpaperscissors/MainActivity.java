@@ -15,6 +15,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -50,9 +51,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "RockPaperScissors";
     static BufferedReader reader;
     static BufferedWriter writer;
-    private File receivedFile;
+    private Payload receivedPayload;
     private Context context;
     private File file;
+    private Uri uri;
 
     // Our handle to Nearby Connections
     private ConnectionsClient connectionsClient;
@@ -190,19 +192,19 @@ public class MainActivity extends AppCompatActivity {
         new PayloadCallback() {
             @Override
             public void onPayloadReceived(String endpointId, Payload payload) {
-                receivedFile =  payload.asFile().asJavaFile();
-//                ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri, "r");
-//                ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri, "r");
-//                receivedPayload = Payload.fromFile(pfd);
-
-//                ParcelFileDescriptor pfd = payload.asStream().asParcelFileDescriptor();
-//                receivedPayload = Payload.fromFile(pfd);
+                try {
+//                  receivedFile =  payload.asFile().asJavaFile();
+                    ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri, "r");
+                    receivedPayload = Payload.fromFile(pfd);
+//                  ParcelFileDescriptor pfd = payload.asStream().asParcelFileDescriptor();
+//                  receivedPayload = Payload.fromFile(pfd);
+                }catch (FileNotFoundException e){}
             }
 
         @Override
         public void onPayloadTransferUpdate(String endpointId, PayloadTransferUpdate update) {
-//            File payloadFile = receivedPayload.asFile().asJavaFile();
-            ArrayList<AbstractPointOfInterest> hisZones = FileToList(receivedFile);
+            File payloadFile = receivedPayload.asFile().asJavaFile();
+            ArrayList<AbstractPointOfInterest> hisZones = FileToList(payloadFile);
             updateMyList(hisZones);
         }
     };
@@ -283,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
 
         context = getApplicationContext();
         String filePath = context.getFilesDir() + "/" + "zones.txt";
+        uri = Uri.parse("content:/" + context.getFilesDir());
 
         file = new File(filePath);
         if(!file.exists()){
