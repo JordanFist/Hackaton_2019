@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import android.Manifest;
 import android.content.Context;
@@ -20,6 +21,7 @@ import android.os.Bundle;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.collection.SimpleArrayMap;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -46,6 +48,13 @@ import com.google.android.gms.nearby.connection.Strategy;
 
 /** Activity controlling the Rock Paper Scissors game */
 public class MainActivity extends AppCompatActivity {
+
+
+    private final SimpleArrayMap<Long, Payload> incomingFilePayloads = new SimpleArrayMap<>();
+    private final SimpleArrayMap<Long, Payload> completedFilePayloads = new SimpleArrayMap<>();
+    private final SimpleArrayMap<Long, String> filePayloadFilenames = new SimpleArrayMap<>();
+
+
 
     public ArrayList<AbstractPointOfInterest> ListPoint = new ArrayList<>();
     private static final String TAG = "RockPaperScissors";
@@ -126,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void ListToFile() {
-        String s;
         for (AbstractPointOfInterest var : ListPoint) {
             String str = "";
             str += String.valueOf(var.getlocalisation().x) + "," + String.valueOf(var.getlocalisation().y) + "\t";
@@ -186,6 +194,33 @@ public class MainActivity extends AppCompatActivity {
         TextView secondPoint = findViewById(R.id.secondPoint);
         secondPoint.setText(ListPoint.get(1).gettype());
     }
+
+    private long addPayloadFilename(String payloadFilenameMessage) {
+        String[] parts = payloadFilenameMessage.split(":");
+        long payloadId = Long.parseLong(parts[0]);
+        String filename = parts[1];
+        filePayloadFilenames.put(payloadId, filename);
+        return payloadId;
+    }
+
+    private void processFilePayload(long payloadId) {
+        // BYTES and FILE could be received in any order, so we call when either the BYTES or the FILE
+        // payload is completely received. The file payload is considered complete only when both have
+        // been received.
+        Payload filePayload = completedFilePayloads.get(payloadId);
+        String filename = filePayloadFilenames.get(payloadId);
+        if (filePayload != null && filename != null) {
+            completedFilePayloads.remove(payloadId);
+            filePayloadFilenames.remove(payloadId);
+
+            // Get the received file (which will be in the Downloads folder)
+            File payloadFile = filePayload.asFile().asJavaFile();
+
+            // Rename the file.
+            payloadFile.renameTo(new File(payloadFile.getParentFile(), filename));
+        }
+    }
+
 
     // Callbacks for receiving payloads
     private final PayloadCallback payloadCallback =
