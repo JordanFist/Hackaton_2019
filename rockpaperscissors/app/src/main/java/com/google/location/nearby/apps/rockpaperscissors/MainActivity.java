@@ -50,9 +50,9 @@ import com.google.android.gms.nearby.connection.Strategy;
 public class MainActivity extends AppCompatActivity {
 
 
-    private final SimpleArrayMap<Long, Payload> incomingFilePayloads = new SimpleArrayMap<>();
-    private final SimpleArrayMap<Long, Payload> completedFilePayloads = new SimpleArrayMap<>();
-    private final SimpleArrayMap<Long, String> filePayloadFilenames = new SimpleArrayMap<>();
+//    private final SimpleArrayMap<Long, Payload> incomingFilePayloads = new SimpleArrayMap<>();
+//    private final SimpleArrayMap<Long, Payload> completedFilePayloads = new SimpleArrayMap<>();
+//    private final SimpleArrayMap<Long, String> filePayloadFilenames = new SimpleArrayMap<>();
 
 
 
@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     static BufferedReader reader;
     static BufferedWriter writer;
     private Payload receivedPayload;
+    private File receivedFile;
     private Context context;
     private File file;
     private Uri uri;
@@ -87,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.ACCESS_WIFI_STATE,
                     Manifest.permission.CHANGE_WIFI_STATE,
                     Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
             };
 
     private static final int REQUEST_CODE_REQUIRED_PERMISSIONS = 1;
@@ -195,31 +198,31 @@ public class MainActivity extends AppCompatActivity {
         secondPoint.setText(ListPoint.get(1).gettype());
     }
 
-    private long addPayloadFilename(String payloadFilenameMessage) {
-        String[] parts = payloadFilenameMessage.split(":");
-        long payloadId = Long.parseLong(parts[0]);
-        String filename = parts[1];
-        filePayloadFilenames.put(payloadId, filename);
-        return payloadId;
-    }
+//    private long addPayloadFilename(String payloadFilenameMessage) {
+//        String[] parts = payloadFilenameMessage.split(":");
+//        long payloadId = Long.parseLong(parts[0]);
+//        String filename = parts[1];
+//        filePayloadFilenames.put(payloadId, filename);
+//        return payloadId;
+//    }
 
-    private void processFilePayload(long payloadId) {
-        // BYTES and FILE could be received in any order, so we call when either the BYTES or the FILE
-        // payload is completely received. The file payload is considered complete only when both have
-        // been received.
-        Payload filePayload = completedFilePayloads.get(payloadId);
-        String filename = filePayloadFilenames.get(payloadId);
-        if (filePayload != null && filename != null) {
-            completedFilePayloads.remove(payloadId);
-            filePayloadFilenames.remove(payloadId);
-
-            // Get the received file (which will be in the Downloads folder)
-            File payloadFile = filePayload.asFile().asJavaFile();
-
-            // Rename the file.
-            payloadFile.renameTo(new File(payloadFile.getParentFile(), filename));
-        }
-    }
+//    private void processFilePayload(long payloadId) {
+//        // BYTES and FILE could be received in any order, so we call when either the BYTES or the FILE
+//        // payload is completely received. The file payload is considered complete only when both have
+//        // been received.
+//        Payload filePayload = completedFilePayloads.get(payloadId);
+//        String filename = filePayloadFilenames.get(payloadId);
+//        if (filePayload != null && filename != null) {
+//            completedFilePayloads.remove(payloadId);
+//            filePayloadFilenames.remove(payloadId);
+//
+//            // Get the received file (which will be in the Downloads folder)
+//            File payloadFile = filePayload.asFile().asJavaFile();
+//
+//            // Rename the file.
+//            payloadFile.renameTo(new File(payloadFile.getParentFile(), filename));
+//        }
+//    }
 
 
     // Callbacks for receiving payloads
@@ -227,19 +230,20 @@ public class MainActivity extends AppCompatActivity {
         new PayloadCallback() {
             @Override
             public void onPayloadReceived(String endpointId, Payload payload) {
-                try {
-//                  receivedFile =  payload.asFile().asJavaFile();
-                    ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri, "r");
-                    receivedPayload = Payload.fromFile(pfd);
+//                try {
+//                    Payload p2 = payload;
+                  receivedFile =  payload.asFile().asJavaFile();
+//                    ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri, "r");
+//                    receivedPayload = Payload.fromFile(pfd);
 //                  ParcelFileDescriptor pfd = payload.asStream().asParcelFileDescriptor();
 //                  receivedPayload = Payload.fromFile(pfd);
-                }catch (FileNotFoundException e){}
+//                }catch (FileNotFoundException e){}
             }
 
         @Override
         public void onPayloadTransferUpdate(String endpointId, PayloadTransferUpdate update) {
-            File payloadFile = receivedPayload.asFile().asJavaFile();
-            ArrayList<AbstractPointOfInterest> hisZones = FileToList(payloadFile);
+//            File payloadFile = receivedPayload.asFile().asJavaFile();
+            ArrayList<AbstractPointOfInterest> hisZones = FileToList(receivedFile);
             updateMyList(hisZones);
         }
     };
@@ -320,6 +324,8 @@ public class MainActivity extends AppCompatActivity {
 
         context = getApplicationContext();
         String filePath = context.getFilesDir() + "/" + "zones.txt";
+        System.out.println( context.getFilesDir());
+        System.out.println( "content:/" +context.getFilesDir());
         uri = Uri.parse("content:/" + context.getFilesDir());
 
         file = new File(filePath);
@@ -453,12 +459,16 @@ public class MainActivity extends AppCompatActivity {
      * Sends the user's selection of rock, paper, or scissors to the opponent.
      */
     private void sendZones(String opponentEndpointId) {
+        Payload p;
         try {
             //    myChoice = choice;
             //    connectionsClient.sendPayload(
             //        opponentEndpointId, Payload.fromBytes(choice.name().getBytes(UTF_8)));
+            p = Payload.fromFile(file);
+            Payload.File f = p.asFile();
+            File fjava = f.asJavaFile();
             connectionsClient.sendPayload(
-                    opponentEndpointId, Payload.fromFile(file));
+                    opponentEndpointId, p);
         } catch (FileNotFoundException e) {
             System.out.print("File not Found !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
