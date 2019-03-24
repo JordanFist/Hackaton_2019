@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         try {
             String text = reader.readLine();
             while (text != null) {
-                System.out.println(text);
                 String[] split = text.split("\t", -1);
                 String[] split2 = split[0].split(",", -1);
                 Point p = new Point(Integer.parseInt(split2[0]), Integer.parseInt(split2[1]));
@@ -132,12 +131,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // TODO
     private void updateMyList(ArrayList<AbstractPointOfInterest> hisZones) {
-        int test = 0;
+        ArrayList<AbstractPointOfInterest> newList = new ArrayList<AbstractPointOfInterest>();
+        int done = 0;
+        int updated = 0;
+        for (AbstractPointOfInterest var1 : ListPoint){
+            for (AbstractPointOfInterest var2 : hisZones){
+                if (var1.getlocalisation().equals(var2.getlocalisation())){
+                    done = 1;
+                    if (var1.getDate() < var2.getDate()){
+                        updated = 1;
+                        newList.add(var2);
+                    } else {
+                        newList.add(var1);
+                    }
+                }
+            }
+            if (done == 0) {
+                newList.add(var1);
+            }
+            done = 0;
+        }
+        if (updated == 1) {
+            file.delete();
+            file.createNewFile();
+            ListToFile();
+        }
     }
-
-    ;
 
     // Callbacks for receiving payloads
     private final PayloadCallback payloadCallback =
@@ -199,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
                         setOpponentName(opponentName);
                         setStatusText(getString(R.string.status_connected));
                         setButtonState(true);
+                        sendZones(opponentEndpointId);
                     } else {
                         Log.i(TAG, "onConnectionResult: connection failed");
                     }
@@ -237,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        writeToFile("1,5\tWaterSpot\t1\n", context);
+        writeToFile("1,5\tSafeArea\t1\n", context);
         reader = null;
         writer = null;
 
@@ -358,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Sends the user's selection of rock, paper, or scissors to the opponent.
      */
-    private void sendZones() {
+    private void sendZones(String opponentEndpointId) {
         try {
             //    myChoice = choice;
             //    connectionsClient.sendPayload(

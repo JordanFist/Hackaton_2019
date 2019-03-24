@@ -33,30 +33,6 @@
       android:gravity="center"
       android:textSize="80sp"/>
 
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal">
-
-    <Button
-        android:id="@+id/rock"
-        android:drawableTop="@drawable/rock"
-        android:text="@string/choice_rock"
-        style="@style/MoveButton"/>
-
-    <Button
-        android:id="@+id/paper"
-        android:drawableTop="@drawable/paper"
-        android:text="@string/choice_paper"
-        style="@style/MoveButton"/>
-
-    <Button
-        android:id="@+id/scissors"
-        android:drawableTop="@drawable/scissors"
-        android:text="@string/choice_scissors"
-        style="@style/MoveButton"/>
-  </LinearLayout>
-
   <Button
       android:id="@+id/find_opponent"
       android:layout_width="match_parent"
