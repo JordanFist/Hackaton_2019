@@ -191,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
             dont=0;
         }
 
+        ListPoint = newList;
+
         TextView firstPoint = findViewById(R.id.firstPoint);
         firstPoint.setText(ListPoint.get(0).gettype());
 
