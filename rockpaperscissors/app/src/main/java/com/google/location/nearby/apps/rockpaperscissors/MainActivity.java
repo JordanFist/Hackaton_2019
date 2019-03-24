@@ -155,9 +155,28 @@ public class MainActivity extends AppCompatActivity {
         }
         if (updated == 1) {
             file.delete();
-            file.createNewFile();
+            try {
+                file.createNewFile();
+            }
+            catch (IOException e){
+            }
             ListToFile();
         }
+        int dont = 0;
+        for (AbstractPointOfInterest var1 : hisZones){
+            for (AbstractPointOfInterest var2 : newList) {
+                if(var1.equals(var2)){
+                   dont = 1;
+                }
+            }
+            if (dont == 0){
+                newList.add(var1);
+            }
+            dont=0;
+        }
+
+        TextView secondPoint = findViewById(R.id.secondPoint);
+        secondPoint.setText(ListPoint.get(1).gettype());
     }
 
     // Callbacks for receiving payloads
@@ -259,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        writeToFile("1,5\tWaterSpot\t100\t1\n", context);
+        writeToFile("1,5\tSafeArea\t100\t1\n", context);
         reader = null;
         writer = null;
 
