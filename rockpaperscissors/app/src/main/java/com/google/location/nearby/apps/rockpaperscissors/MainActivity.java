@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import android.Manifest;
 import android.content.Context;
@@ -126,15 +127,8 @@ public class MainActivity extends AppCompatActivity {
             String str = "";
             str += String.valueOf(var.getlocalisation().x) + "," + String.valueOf(var.getlocalisation().y) + "\t";
             str += var.gettype() + "\t";
-            str += var.parameters();
-            try {
-                FileWriter fstream = new FileWriter(file, true); //true tells to append data.
-                writer = new BufferedWriter(fstream);
-                writer.write(str + "\n");
-                fstream.flush();
-            } catch (IOException e) {
-                System.err.println("Error: " + e.getMessage());
-            }
+            str += var.parameters() + "\n";
+            writeToFile(str, context);
         }
     }
 
@@ -171,6 +165,17 @@ public class MainActivity extends AppCompatActivity {
                 public void onEndpointLost(String endpointId) {
                 }
             };
+
+    private void writeToFile(String data,Context context) {
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("zones.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
 
     // Callbacks for connections to other devices
     private final ConnectionLifecycleCallback connectionLifecycleCallback =
@@ -232,19 +237,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        try{
-          FileWriter fstream = new FileWriter(file, true); //true tells to append data.
-          writer = new BufferedWriter(fstream);
-          writer.write("1,5\tWaterSpot\t1\n");
-          fstream.flush();
-        }
-        catch (IOException e){
-
-        }
+        writeToFile("1,5\tWaterSpot\t1\n", context);
         reader = null;
         writer = null;
 
-        ListPoint = this.FileToList(file);
+        ListPoint = FileToList(file);
 
         TextView firstPoint = findViewById(R.id.firstPoint);
         firstPoint.setText(ListPoint.get(0).gettype());
