@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "RockPaperScissors";
     static BufferedReader reader;
     static BufferedWriter writer;
+    private File receivedFile;
     private Context context;
     private File file;
 
@@ -175,22 +176,27 @@ public class MainActivity extends AppCompatActivity {
             dont=0;
         }
 
+        TextView firstPoint = findViewById(R.id.firstPoint);
+        firstPoint.setText(ListPoint.get(0).gettype());
+
         TextView secondPoint = findViewById(R.id.secondPoint);
         secondPoint.setText(ListPoint.get(1).gettype());
     }
 
     // Callbacks for receiving payloads
     private final PayloadCallback payloadCallback =
-            new PayloadCallback() {
-                @Override
-                public void onPayloadReceived(String endpointId, Payload payload) {
-                    ArrayList<AbstractPointOfInterest> hisZones = FileToList(payload.asFile().asJavaFile());
-                    updateMyList(hisZones);
-                }
+        new PayloadCallback() {
+            @Override
+            public void onPayloadReceived(String endpointId, Payload payload) {
+                receivedFile = payload.asFile().asJavaFile();
+            }
 
         @Override
-        public void onPayloadTransferUpdate(String endpointId, PayloadTransferUpdate update) {}
-            };
+        public void onPayloadTransferUpdate(String endpointId, PayloadTransferUpdate update) {
+            ArrayList<AbstractPointOfInterest> hisZones = FileToList(receivedFile);
+            updateMyList(hisZones);
+        }
+    };
 
     // Callbacks for finding other devices
     private final EndpointDiscoveryCallback endpointDiscoveryCallback =
