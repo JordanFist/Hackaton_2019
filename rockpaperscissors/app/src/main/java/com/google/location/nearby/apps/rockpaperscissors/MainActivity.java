@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "RockPaperScissors";
     static BufferedReader reader;
     static BufferedWriter writer;
-    private Payload.File receivedPayload;
+    private File receivedFile;
     private Context context;
     private File file;
 
@@ -190,16 +190,19 @@ public class MainActivity extends AppCompatActivity {
         new PayloadCallback() {
             @Override
             public void onPayloadReceived(String endpointId, Payload payload) {
-//                receivedPayload = payload.asFile();
+                receivedFile =  payload.asFile().asJavaFile();
 //                ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri, "r");
-                ParcelFileDescriptor pfd = payload.asStream().asParcelFileDescriptor();
-                receivedPayload = Payload.fromFile(pfd);
+//                ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri, "r");
+//                receivedPayload = Payload.fromFile(pfd);
+
+//                ParcelFileDescriptor pfd = payload.asStream().asParcelFileDescriptor();
+//                receivedPayload = Payload.fromFile(pfd);
             }
 
         @Override
         public void onPayloadTransferUpdate(String endpointId, PayloadTransferUpdate update) {
 //            File payloadFile = receivedPayload.asFile().asJavaFile();
-            ArrayList<AbstractPointOfInterest> hisZones = FileToList(receivedPayload.asJavaFile());
+            ArrayList<AbstractPointOfInterest> hisZones = FileToList(receivedFile);
             updateMyList(hisZones);
         }
     };
