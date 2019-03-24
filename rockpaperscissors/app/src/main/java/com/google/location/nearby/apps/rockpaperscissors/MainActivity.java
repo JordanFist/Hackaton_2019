@@ -5,8 +5,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import android.Manifest;
 import android.content.Context;
@@ -55,7 +58,13 @@ public class MainActivity extends AppCompatActivity {
 
   private void FileToList() {
     String text;
-    reader = new BufferedReader("zones.txt", true);
+    try {
+      FileReader fstream = new FileReader("zones.txt"); //true tells to append data.
+      reader = new BufferedReader(fstream);
+    }
+    catch(FileNotFoundException e){
+      System.out.print("YO");
+    }
     try {
       while ((text = reader.readLine()) != null) {
         String[] split = text.split("\t", -1);
@@ -63,16 +72,24 @@ public class MainActivity extends AppCompatActivity {
         Point p = new Point(Integer.parseInt(split2[0]), Integer.parseInt(split2[1]));
         switch (split[1]) {
           case "SafeArea":
-            ListPoint.add(new SafeArea(p, split[1], Integer.parseInt(split[2])));
+            SafeArea area = new SafeArea(p, split[1], Integer.parseInt(split[2]));
+            if(!ListPoint.contains(area)){
+              ListPoint.add(area);
+            }
             break;
           case "WaterSpot":
-            ListPoint.add(new WaterSpot(p, split[1], Integer.parseInt(split[2])));
+            WaterSpot water = new WaterSpot(p, split[1], Integer.parseInt(split[2]));
+            if(!ListPoint.contains(water)){
+              ListPoint.add(water);
+            }
             break;
         }
       }
     }
+
     catch(IOException e){
-        System.out.println("MDR");
+        System.out.println("error file");
+        System.exit(1);
       }
   }
   private void ListToFile() {
