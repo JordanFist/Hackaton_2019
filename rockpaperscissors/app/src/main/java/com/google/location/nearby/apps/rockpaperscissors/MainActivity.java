@@ -49,20 +49,14 @@ public class MainActivity extends AppCompatActivity {
   static BufferedReader reader;
   static BufferedWriter writer;
   private Context context;
+  private File file;
 
   private void FileToList(){
-//    String text;
-
-    String filePath = context.getFilesDir() + "/" + "zones.txt";
-    File file = new File(filePath);
-
-    try {
+    try { // be sure that the file exist
       FileReader fstream = new FileReader(file); //true tells to append data.
       reader = new BufferedReader(fstream);
     } catch(FileNotFoundException e) {
       try{
-//        File file = new File("zones.txt");
-//        System.out.print("OOOOOOOOOOOOOOOOOOOOOO");
         file.createNewFile();
         FileReader fstream = new FileReader(file); //true tells to append data.
         reader = new BufferedReader(fstream);
@@ -280,6 +274,8 @@ public class MainActivity extends AppCompatActivity {
     nameView.setText(getString(R.string.codename, codeName));
 
     context = getApplicationContext();
+    String filePath = context.getFilesDir() + "/" + "zones.txt";
+    file = new File(filePath);
     ListPoint = new ArrayList<AbstractPointOfInterest>();
     reader = null;
     writer = null;
@@ -397,6 +393,10 @@ public class MainActivity extends AppCompatActivity {
 
   /** Sends the user's selection of rock, paper, or scissors to the opponent. */
   private void sendGameChoice(GameChoice choice) {
+//    connectionsClient.sendPayload(
+//            opponentEndpointId, Payload.fromFile()));
+
+
     myChoice = choice;
     connectionsClient.sendPayload(
         opponentEndpointId, Payload.fromBytes(choice.name().getBytes(UTF_8)));
