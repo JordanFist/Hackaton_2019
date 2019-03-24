@@ -4,6 +4,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -44,52 +45,88 @@ public class MainActivity extends AppCompatActivity {
 
   public ArrayList<AbstractPointOfInterest> ListPoint;
   private static final String TAG = "RockPaperScissors";
-  BufferedReader reader;
-  BufferedWriter writer;
+  static BufferedReader reader;
+  static BufferedWriter writer;
+  private static Context context;
 
   MainActivity(){
     ListPoint = new ArrayList<AbstractPointOfInterest>();
-    BufferedReader reader = null;
-    BufferedWriter writer = null;
+    reader = null;
+    writer = null;
     FileToList();
   }
 
-  private void FileToList() {
-    String text;
+  private void FileToList(){
+//    String text;
     try {
       FileReader fstream = new FileReader("zones.txt"); //true tells to append data.
       reader = new BufferedReader(fstream);
+    } catch(FileNotFoundException e) {
+      File file = new File("zones.txt");
+      try{
+        System.out.print("OOOOOOOOOOOOOOOOOOOOOO");
+        file.createNewFile();
+        FileReader fstream = new FileReader("zones.txt"); //true tells to append data.
+        reader = new BufferedReader(fstream);
+      } catch(IOException e1) {
+        System.out.println("error");
+      }
     }
-    catch(FileNotFoundException e){
-      System.out.print("YO");
-    }
+
     try {
-      while ((text = reader.readLine()) != null) {
+//        reader = new BufferedReader(new FileReader(
+//                "/Users/pankaj/Downloads/myfile.txt"));
+      String text = reader.readLine();
+      while (text != null) {
+        System.out.println(text);
         String[] split = text.split("\t", -1);
         String[] split2 = split[0].split(",", -1);
         Point p = new Point(Integer.parseInt(split2[0]), Integer.parseInt(split2[1]));
         switch (split[1]) {
           case "SafeArea":
             SafeArea area = new SafeArea(p, split[1], Integer.parseInt(split[2]));
-            if(!ListPoint.contains(area)){
+            if (!ListPoint.contains(area)) {
               ListPoint.add(area);
             }
             break;
           case "WaterSpot":
             WaterSpot water = new WaterSpot(p, split[1], Integer.parseInt(split[2]));
-            if(!ListPoint.contains(water)){
+            if (!ListPoint.contains(water)) {
               ListPoint.add(water);
             }
             break;
         }
+        // read next line
+        text = reader.readLine();
       }
-    }
+      reader.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
 
-    catch(IOException e){
-        System.out.println("error file");
-        System.exit(1);
-      }
+//    try {
+//      while ((line = reader.readLine()) != null) {
+//        String[] split = line.split("\t", -1);
+//        String[] split2 = split[0].split(",", -1);
+//        Point p = new Point(Integer.parseInt(split2[0]), Integer.parseInt(split2[1]));
+//        switch (split[1]) {
+//          case "SafeArea":
+//            SafeArea area = new SafeArea(p, split[1], Integer.parseInt(split[2]));
+//            if(!ListPoint.contains(area)){
+//              ListPoint.add(area);
+//            }
+//            break;
+//          case "WaterSpot":
+//            WaterSpot water = new WaterSpot(p, split[1], Integer.parseInt(split[2]));
+//            if(!ListPoint.contains(water)){
+//              ListPoint.add(water);
+//            }
+//            break;
+//        }
+//      }
+//    }
   }
+
   private void ListToFile() {
     String s;
     for(AbstractPointOfInterest var : ListPoint){
