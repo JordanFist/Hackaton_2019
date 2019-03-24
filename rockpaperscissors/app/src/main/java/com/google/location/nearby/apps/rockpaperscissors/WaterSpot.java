@@ -15,11 +15,12 @@ class WaterSpot extends AbstractPointOfInterest{
         super(p, s);
         waterLevel = nb;
     }
-    int cmp_pointofinterest(SafeArea p1, SafeArea p2){
 
+    int cmp_pointofinterest(AbstractPointOfInterest A, AbstractPointOfInterest B){
+        return 0;
     }
 
-    String parametes(){
+    String parameters(){
         return String.valueOf(waterLevel);
     }
 }

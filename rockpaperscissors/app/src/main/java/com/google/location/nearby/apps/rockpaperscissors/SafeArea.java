@@ -15,8 +15,8 @@ class SafeArea extends AbstractPointOfInterest{
         survivors = nb;
     }
 
-    int cmp_pointofinterest(SafeArea p1, SafeArea p2){
-
+    int cmp_pointofinterest(AbstractPointOfInterest A, AbstractPointOfInterest B){
+        return 0;
     }
 
     String parameters(){
