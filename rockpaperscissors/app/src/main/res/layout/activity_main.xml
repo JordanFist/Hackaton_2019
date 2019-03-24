@@ -18,6 +18,14 @@
       style="@style/StatusText"/>
 
   <TextView
+      android:id="@+id/firstPoint"
+      style="@style/StatusText"/>
+
+  <TextView
+      android:id="@+id/secondPoint"
+      style="@style/StatusText"/>
+
+  <TextView
       android:id="@+id/score"
       android:layout_width="match_parent"
       android:layout_height="0dp"

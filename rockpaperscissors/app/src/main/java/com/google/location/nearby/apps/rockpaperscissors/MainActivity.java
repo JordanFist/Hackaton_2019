@@ -43,7 +43,7 @@ import com.google.android.gms.nearby.connection.Strategy;
 /** Activity controlling the Rock Paper Scissors game */
 public class MainActivity extends AppCompatActivity {
 
-    public ArrayList<AbstractPointOfInterest> ListPoint;
+    public ArrayList<AbstractPointOfInterest> ListPoint = new ArrayList<>();
     private static final String TAG = "RockPaperScissors";
     static BufferedReader reader;
     static BufferedWriter writer;
@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private static final Strategy STRATEGY = Strategy.P2P_STAR;
 
     private ArrayList<AbstractPointOfInterest> FileToList(File f) {
+      ArrayList<AbstractPointOfInterest> tmp = new ArrayList<AbstractPointOfInterest>();
         try { // be sure that the file exist
             FileReader fstream = new FileReader(f); //true tells to append data.
             reader = new BufferedReader(fstream);
@@ -102,15 +103,11 @@ public class MainActivity extends AppCompatActivity {
                 switch (split[1]) {
                     case "SafeArea":
                         SafeArea area = new SafeArea(p, split[1], Integer.parseInt(split[2]));
-                        if (!ListPoint.contains(area)) {
-                            ListPoint.add(area);
-                        }
+                        tmp.add(area);
                         break;
                     case "WaterSpot":
                         WaterSpot water = new WaterSpot(p, split[1], Integer.parseInt(split[2]));
-                        if (!ListPoint.contains(water)) {
-                            ListPoint.add(water);
-                        }
+                        tmp.add(water);
                         break;
                 }
                 // read next line
@@ -120,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return tmp;
     }
 
     private void ListToFile() {
@@ -130,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             str += var.gettype() + "\t";
             str += var.parameters();
             try {
-                FileWriter fstream = new FileWriter("zones.txt", true); //true tells to append data.
+                FileWriter fstream = new FileWriter(file, true); //true tells to append data.
                 writer = new BufferedWriter(fstream);
                 writer.write(str + "\n");
                 fstream.flush();
@@ -224,11 +222,35 @@ public class MainActivity extends AppCompatActivity {
 
         context = getApplicationContext();
         String filePath = context.getFilesDir() + "/" + "zones.txt";
+
         file = new File(filePath);
-        ListPoint = new ArrayList<AbstractPointOfInterest>();
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            }
+            catch (IOException e){
+            }
+        }
+
+        try{
+          FileWriter fstream = new FileWriter(file, true); //true tells to append data.
+          writer = new BufferedWriter(fstream);
+          writer.write("1,5\tWaterSpot\t1\n");
+          fstream.flush();
+        }
+        catch (IOException e){
+
+        }
         reader = null;
         writer = null;
-        ListPoint = FileToList(file);
+
+        ListPoint = this.FileToList(file);
+
+        TextView firstPoint = findViewById(R.id.firstPoint);
+        firstPoint.setText(ListPoint.get(0).gettype());
+
+        TextView secondPoint = findViewById(R.id.secondPoint);
+        secondPoint.setText("undefined");
 
         connectionsClient = Nearby.getConnectionsClient(this);
 
