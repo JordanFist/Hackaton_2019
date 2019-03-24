@@ -1,0 +1,22 @@
+<resources>
+    <string name="mapbox_access_token">pk.eyJ1IjoiY2x1bmsiLCJhIjoiY2p0bG10NG5hMTdsNjN5bjA2eWtqeTE2MyJ9.5L7sC2BLjn7IOSG9oYH69w</string>
+    <string name="app_name">Hack-pocalypse</string>
+    <string-array name="horn_song">
+        <item>Klaxon</item>
+        <item>Elephant</item>
+        <item>Vuvuzela</item>
+    </string-array>
+    <string-array name="background_theme">
+        <item>Black</item>
+        <item>White</item>
+        <item>Red</item>
+        <item>Blue</item>
+    </string-array>
+    <string-array name="listenning_rate">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+</resources>

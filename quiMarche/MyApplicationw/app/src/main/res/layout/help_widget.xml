@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.andoid.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:paddingTop="15dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    tools:context="com.example.myapplicationw.MainActivity">
+
+    <FrameLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:gravity="center"
+            android:text="Did you know ?"
+            android:textSize="20dp"
+            android:textColor="#FFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <ImageView
+            android:layout_marginTop="35dp"
+            android:layout_width="380dp"
+            android:layout_height="250dp"
+            android:src="@drawable/zombie"/>
+
+        <TextView
+            android:gravity="center"
+            android:text="How to kill a zombie ?"
+            android:layout_marginTop="300dp"
+            android:textSize="20dp"
+            android:textColor="#FFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <ImageView
+            android:layout_marginTop="290dp"
+            android:layout_width="380dp"
+            android:layout_height="300dp"
+            android:src="@drawable/kill_zombie"/>
+
+        <TextView
+            android:gravity="center"
+            android:text="How to light a fire ?"
+            android:layout_marginTop="550dp"
+            android:textSize="20dp"
+            android:textColor="#FFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <ImageView
+            android:layout_marginTop="570dp"
+            android:layout_width="380dp"
+            android:layout_height="300dp"
+            android:src="@drawable/campfire"/>
+
+        <Button
+            android:layout_marginTop="890dp"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:background="@drawable/left_arrow"
+            android:onClick="backToMenu" />
+
+    </FrameLayout>
+</ScrollView>
