@@ -21,6 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "RockPaperScissors";
     static BufferedReader reader;
     static BufferedWriter writer;
-    private File receivedFile;
+    private Payload.File receivedPayload;
     private Context context;
     private File file;
 
@@ -188,12 +190,16 @@ public class MainActivity extends AppCompatActivity {
         new PayloadCallback() {
             @Override
             public void onPayloadReceived(String endpointId, Payload payload) {
-                receivedFile = payload.asFile().asJavaFile();
+//                receivedPayload = payload.asFile();
+//                ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri, "r");
+                ParcelFileDescriptor pfd = payload.asStream().asParcelFileDescriptor();
+                receivedPayload = Payload.fromFile(pfd);
             }
 
         @Override
         public void onPayloadTransferUpdate(String endpointId, PayloadTransferUpdate update) {
-            ArrayList<AbstractPointOfInterest> hisZones = FileToList(receivedFile);
+//            File payloadFile = receivedPayload.asFile().asJavaFile();
+            ArrayList<AbstractPointOfInterest> hisZones = FileToList(receivedPayload.asJavaFile());
             updateMyList(hisZones);
         }
     };
