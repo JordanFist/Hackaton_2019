@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context="com.example.myapplication.MainPage">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <Button
+            android:id="@+id/map_icon"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/map_icon"
+            android:clickable="true"
+            android:onClick="mapWidget" />
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="160dp"
+            android:text="Maps"
+            android:textSize="30dp"
+            android:gravity="center"/>
+
+
+        <Button
+            android:id="@+id/sos_icon"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="240dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:clickable="true"
+            android:background="@drawable/sos_icon"
+            android:onClick="sosWidget"
+            />
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="240dp"
+            android:layout_marginTop="160dp"
+            android:text="Sos"
+            android:textSize="30dp"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/questions_icon"
+            android:layout_marginTop="230dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:clickable="true"
+            android:background="@drawable/questions_icon"
+            android:onClick="helpWidget"
+            />
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="375dp"
+            android:text="Help"
+            android:textSize="30dp"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/horn_icon"
+            android:layout_marginTop="230dp"
+            android:layout_marginLeft="240dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:clickable="true"
+            android:background="@drawable/horn_icon"
+            android:onClick="hornWidget"
+            />
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="240dp"
+            android:layout_marginTop="375dp"
+            android:text="Horn"
+            android:textSize="30dp"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/settings_icon"
+            android:layout_marginTop="445dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:clickable="true"
+            android:background="@drawable/settings_icon"
+            android:onClick="settingsWidget"
+            />
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="580dp"
+            android:text="Settings"
+            android:textSize="30dp"
+            android:gravity="center"/>
+
+    </FrameLayout>
+</FrameLayout>
