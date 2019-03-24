@@ -95,6 +95,14 @@
         android:src="@android:drawable/ic_menu_add"
         android:layout_gravity="bottom|right" />
 
+    <Button
+        android:layout_marginTop="610dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:background="@drawable/left_arrow"
+        android:onClick="backToMenu" />
+
 </com.mapbox.mapboxsdk.maps.MapView>
 
 </android.support.constraint.ConstraintLayout>

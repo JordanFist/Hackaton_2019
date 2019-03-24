@@ -1,6 +1,7 @@
 package com.example.myapplicationw;
 
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -25,6 +26,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
   implements OnMapReadyCallback, MapboxMap.OnMapClickListener {
+    MediaPlayer horn;
     private MapView mapView;
     private MapboxMap ownMapboxMap;
     private GeoJsonSource geoJsonSourceWater;
@@ -47,21 +49,20 @@ public class MainActivity extends AppCompatActivity
     private FloatingActionButton fab4;
     private boolean isFABOpen;
     private int idLayer = 0;
+    private Bundle savedInstanceState;
 
     boolean dangerMrk = false;
     boolean safeMrk = false;
     boolean waterMrk = false;
     boolean foodMrk = false;
+    boolean mapviewb = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void mapWidget(View v) {
+        mapviewb = true;
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         setContentView(R.layout.activity_main);
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab1 =  findViewById(R.id.fab1);
         fab2 =  findViewById(R.id.fab2);
@@ -108,8 +109,17 @@ public class MainActivity extends AppCompatActivity
         });
 
         mapView.getMapAsync(this);
+        //
+    }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.main_page);
+        this.savedInstanceState = savedInstanceState;
+
+        horn = MediaPlayer.create(this, R.raw.horn_sound);
     }
 
     public void dangerButtonAct() {
@@ -282,43 +292,70 @@ public class MainActivity extends AppCompatActivity
     // Add the mapView's own lifecycle methods to the activity's lifecycle methods
     @Override
     public void onStart() {
-        super.onStart();
-        mapView.onStart();
+        if(!mapviewb)super.onStart();
+        else mapView.onStart();
+
     }
 
     @Override
     public void onResume() {
-        super.onResume();
-        mapView.onResume();
+        if(!mapviewb)super.onResume();
+        else mapView.onResume();
     }
 
     @Override
     public void onPause() {
-        super.onPause();
-        mapView.onPause();
+        if(!mapviewb)super.onPause();
+        else mapView.onPause();
     }
 
     @Override
     public void onStop() {
-        super.onStop();
-        mapView.onStop();
+        if(!mapviewb)super.onStop();
+        else mapView.onStop();
     }
 
     @Override
     public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
+        if(!mapviewb) super.onLowMemory();
+        else mapView.onLowMemory();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
+        if(!mapviewb) super.onDestroy();
+        else mapView.onDestroy();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
+        if(!mapviewb) super.onSaveInstanceState(outState);
+        else mapView.onSaveInstanceState(outState);
     }
+
+    public void playHorn(View v) {
+        horn.start();
+    }
+
+
+    public void sosWidget(View v) {
+
+    }
+
+    public void settingsWidget(View v) {
+        setContentView(R.layout.settings_widget);
+    }
+
+    public void helpWidget(View v) {
+        setContentView(R.layout.help_widget);
+    }
+
+    public void hornWidget(View v) {
+        setContentView(R.layout.horn_widget);
+    }
+
+    public void backToMenu(View v) {
+        setContentView(R.layout.main_page);
+    }
+
 }
